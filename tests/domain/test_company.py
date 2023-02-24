@@ -1,6 +1,7 @@
-from src.domain.company import Company
-from src.domain.products import Products
 import json
+
+from src.domain.company import Company
+
 
 class TestCompany:
     def test_company_attributes_equal_to_expected(self):
@@ -9,9 +10,8 @@ class TestCompany:
         WHEN attribute company_id is requeried
         THEN checks if attribute company_id from the company object is equal to the expected data
         """
-        new_company = Company('claro_11')
-        assert new_company.company_id == 'claro_11'
-
+        new_company = Company("claro_11")
+        assert new_company.company_id == "claro_11"
 
     def test_company_obj_as_dict(self):
         """
@@ -20,7 +20,7 @@ class TestCompany:
         THEN returns the user object as a dictionary with keys company_id, products, product.id and product.value
         """
         expected_dict = {"company_id": "claro_11"}
-        new_company = Company('claro_11')
+        new_company = Company("claro_11")
 
         assert new_company.company_as_dict() == expected_dict
 
@@ -30,8 +30,6 @@ class TestCompany:
         WHEN converts the company object into dictionary
         THEN checks if the returned dict serialized in json is equal to the expected json
         """
-        new_company = Company('claro_11')
+        new_company = Company("claro_11")
         expected_json = """{"company_id": "claro_11"}"""
         assert json.dumps(new_company.company_as_dict()) == expected_json
-
-    

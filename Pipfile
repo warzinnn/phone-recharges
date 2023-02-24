@@ -12,6 +12,9 @@ psycopg2 = "*"
 flask-sqlalchemy = "*"
 mock-alchemy = "*"
 pytest-flask = "*"
+isort = "*"
+flake8 = "*"
+black = "*"
 
 [dev-packages]
 

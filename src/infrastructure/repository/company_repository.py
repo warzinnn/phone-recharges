@@ -1,4 +1,5 @@
 from typing import List
+
 from src.domain.company import Company
 from src.infrastructure.config.exceptions import EntityAlreadyExists
 
@@ -19,7 +20,7 @@ class CompanyRepository:
                 return data
             except Exception as e:
                 return e
-    
+
     def select_company_by_id(self, company_id: str) -> List[Company]:
         """
         Select data in Company table by company_id
@@ -28,14 +29,15 @@ class CompanyRepository:
         """
         with self.__connection_handler() as db:
             try:
-                data = db.session\
-                    .query(Company)\
-                    .filter(Company.company_id == company_id)\
+                data = (
+                    db.session.query(Company)
+                    .filter(Company.company_id == company_id)
                     .all()
+                )
                 return data
             except Exception as e:
                 return e
-    
+
     def create_new_company(self, company_id: str) -> Company:
         """
         Insert data in Company table
@@ -50,7 +52,7 @@ class CompanyRepository:
             try:
                 db.session.expire_on_commit = False
                 if self.select_company_by_id(company_id):
-                    raise EntityAlreadyExists(f'Company {company_id} already exists.')
+                    raise EntityAlreadyExists(f"Company {company_id} already exists.")
                 data_insert = Company(company_id)
                 db.session.add(data_insert)
                 db.session.commit()
@@ -67,10 +69,11 @@ class CompanyRepository:
         """
         with self.__connection_handler() as db:
             try:
-                data = db.session\
-                    .query(Company)\
-                    .filter(Company.company_id == company_id)\
+                data = (
+                    db.session.query(Company)
+                    .filter(Company.company_id == company_id)
                     .delete()
+                )
                 db.session.commit()
                 return data
             except Exception as e:

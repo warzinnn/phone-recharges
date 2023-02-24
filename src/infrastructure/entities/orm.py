@@ -1,18 +1,10 @@
-from sqlalchemy.orm import registry, relationship, class_mapper
+from sqlalchemy import FLOAT, Column, ForeignKey, String, Table
 from sqlalchemy.exc import ArgumentError
+from sqlalchemy.orm import class_mapper, registry, relationship
 from sqlalchemy.orm.exc import UnmappedClassError
-
-from sqlalchemy import (
-    Table,
-    Column,
-    String,
-    FLOAT,
-    ForeignKey
-)
 
 from src.domain.company import Company
 from src.domain.products import Products
-
 
 """ Mapper (Imperative Mapping)
 Using this approach the ORM Depends on Model.
@@ -32,7 +24,7 @@ In the configure_mappers() the relationship is defined.
 company_table = Table(
     "company",
     mapper_registry.metadata,
-    Column("company_id", String(25), primary_key=True)
+    Column("company_id", String(25), primary_key=True),
 )
 
 """ Product entity
@@ -50,8 +42,9 @@ products_table = Table(
     mapper_registry.metadata,
     Column("id", String(25), primary_key=True),
     Column("value", FLOAT, nullable=False),
-    Column("id_company", String, ForeignKey("company.company_id"))
+    Column("id_company", String, ForeignKey("company.company_id")),
 )
+
 
 def is_mapped_class(cls):
     """Checks if the class is already mapped to avoid errors"""
@@ -70,16 +63,15 @@ def configure_mappers():
             Company,
             company_table,
             properties={
-                "producties": relationship(Products, back_populates="companies", lazy="subquery")
+                "producties": relationship(
+                    Products, back_populates="companies", lazy="subquery"
+                )
             },
         )
         mapper_registry.map_imperatively(
-            Products, 
+            Products,
             products_table,
             properties={
                 "companies": relationship(Company, back_populates="producties")
-            }
+            },
         )
-
-
-  

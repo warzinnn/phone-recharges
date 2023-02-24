@@ -1,8 +1,9 @@
 from typing import List
-from src.infrastructure.config.connection import DBConnectionHandler
-from src.domain.products import Products
+
 from src.domain.company import Company
+from src.domain.products import Products
 from src.infrastructure.config.exceptions import EntityAlreadyExists
+
 
 class ProductsRepository:
     def __init__(self, connection_handler) -> None:
@@ -18,9 +19,8 @@ class ProductsRepository:
             try:
                 data = db.session.query(Products).all()
                 return data
-            except Exception as e:
+            except Exception:
                 return None
-
 
     def select_product_by_id(self, product_id: str) -> Products:
         """
@@ -30,10 +30,9 @@ class ProductsRepository:
         """
         with self.__connection_handler() as db:
             try:
-                data = db.session\
-                    .query(Products)\
-                    .filter(Products.id == product_id)\
-                    .all()
+                data = (
+                    db.session.query(Products).filter(Products.id == product_id).all()
+                )
                 return data
             except Exception as e:
                 return e
@@ -46,10 +45,7 @@ class ProductsRepository:
         """
         with self.__connection_handler() as db:
             try:
-                data = db.session\
-                    .query(Products)\
-                    .filter(Products.value == value)\
-                    .all()
+                data = db.session.query(Products).filter(Products.value == value).all()
                 return data
             except Exception as e:
                 return e
@@ -62,18 +58,21 @@ class ProductsRepository:
         """
         with self.__connection_handler() as db:
             try:
-                data = db.session\
-                    .query(Products)\
-                    .filter(Products.id_company == company_id)\
+                data = (
+                    db.session.query(Products)
+                    .filter(Products.id_company == company_id)
                     .all()
+                )
                 return data
             except Exception as e:
                 return e
 
-    def create_new_product(self, product_id: str, value: float, company_id: str) -> Products:
+    def create_new_product(
+        self, product_id: str, value: float, company_id: str
+    ) -> Products:
         """
         Insert data in Product table
-        :param 
+        :param
             - product_id: Id of the product
             - value: The value of product
             - id_company: id of the company
@@ -88,7 +87,7 @@ class ProductsRepository:
             try:
                 db.session.expire_on_commit = False
                 if self.select_product_by_id(product_id):
-                    raise EntityAlreadyExists('Product already exists.')
+                    raise EntityAlreadyExists("Product already exists.")
                 data_insert = Products(product_id, value, company_id)
                 db.session.add(data_insert)
                 db.session.commit()
@@ -96,7 +95,7 @@ class ProductsRepository:
             except Exception as e:
                 db.session.rollback()
                 raise e
-        
+
     def update_product(self, id_company: str, product_id: str, value: float) -> int:
         """
         Update data in Product table by id_company_value
@@ -107,17 +106,19 @@ class ProductsRepository:
         """
         with self.__connection_handler() as db:
             try:
-                data = db.session\
-                    .query(Products)\
-                    .filter(Products.id_company == id_company, Products.id == product_id)\
+                data = (
+                    db.session.query(Products)
+                    .filter(
+                        Products.id_company == id_company, Products.id == product_id
+                    )
                     .update({Products.value: value})
+                )
                 db.session.commit()
                 return data
             except Exception as e:
                 db.session.rollback()
                 raise e
 
-    
     def delete_product(self, product_id: str) -> int:
         """
         Delete data in Product table by product_id
@@ -126,10 +127,11 @@ class ProductsRepository:
         """
         with self.__connection_handler() as db:
             try:
-                data = db.session\
-                    .query(Products)\
-                    .filter(Products.id == product_id)\
+                data = (
+                    db.session.query(Products)
+                    .filter(Products.id == product_id)
                     .delete()
+                )
                 db.session.commit()
                 return data
             except Exception as e:

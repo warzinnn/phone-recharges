@@ -1,8 +1,7 @@
 from typing import List
 
 
-class TestBlueprintProduct():
-
+class TestBlueprintProduct:
     def test_blueprint_products_status_code_equals_200(self, client):
         """
         GIVEN a flask app is configured for testing
