@@ -7,6 +7,7 @@ from flask import Flask
 
 import src.infrastructure.entities.orm as ORM
 from src.blueprint.blueprint_company import blueprint_company
+from src.blueprint.blueprint_recharges import blueprint_recharges
 
 
 def create_app():
@@ -21,7 +22,7 @@ def create_app():
 
     # Register blueprint
     app.register_blueprint(blueprint_company, url_prefix="/company")
-    # app.register_blueprint(blueprint_products.blueprint_products, url_prefix='/products')
+    app.register_blueprint(blueprint_recharges, url_prefix='/recharge')
 
     # configure mappers
     ORM.configure_mappers()

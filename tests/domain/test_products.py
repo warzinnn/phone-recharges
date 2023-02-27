@@ -1,6 +1,6 @@
 import json
 
-from src.domain.products import Products
+from src.domain.model.products import Products
 
 
 class TestProducts:

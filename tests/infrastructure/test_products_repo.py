@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 
-from src.domain.products import Products
+from src.domain.model.products import Products
 from src.infrastructure.repository.products_repository import \
     ProductsRepository
 

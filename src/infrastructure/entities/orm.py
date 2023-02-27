@@ -3,8 +3,9 @@ from sqlalchemy.exc import ArgumentError
 from sqlalchemy.orm import class_mapper, registry, relationship
 from sqlalchemy.orm.exc import UnmappedClassError
 
-from src.domain.company import Company
-from src.domain.products import Products
+from src.domain.model.company import Company
+from src.domain.model.products import Products
+from src.domain.model.recharge import Recharge
 
 """ Mapper (Imperative Mapping)
 Using this approach the ORM Depends on Model.
@@ -46,6 +47,23 @@ products_table = Table(
 )
 
 
+"""Recharge entity
+"""
+recharges_table = Table(
+    "recharges",
+    mapper_registry.metadata,
+    Column("recharge_id", String(36), primary_key=True),
+    Column("created_at", String, nullable=False),
+    Column("phone_number", String(13), nullable=False),
+    Column("product_id", String, ForeignKey("products.id"))
+)
+
+
+
+
+
+
+
 def is_mapped_class(cls):
     """Checks if the class is already mapped to avoid errors"""
     try:
@@ -58,20 +76,26 @@ def is_mapped_class(cls):
 
 def configure_mappers():
     """Configure mappers"""
-    if not is_mapped_class(Company) and not is_mapped_class(Products):
+    if not is_mapped_class(Company) and not is_mapped_class(Products) and not is_mapped_class(Recharge):
         mapper_registry.map_imperatively(
             Company,
             company_table,
             properties={
-                "producties": relationship(
-                    Products, back_populates="companies", lazy="subquery"
-                )
+                "producties": relationship(Products, back_populates="companies", lazy="subquery")
             },
         )
         mapper_registry.map_imperatively(
             Products,
             products_table,
             properties={
-                "companies": relationship(Company, back_populates="producties")
+                "companies": relationship(Company, back_populates="producties"),
+                "recharges_p": relationship(Recharge, back_populates="producties", lazy="subquery")
+            },
+        )
+        mapper_registry.map_imperatively(
+            Recharge,
+            recharges_table,
+            properties={
+                "producties": relationship(Products, back_populates="recharges_p")
             },
         )

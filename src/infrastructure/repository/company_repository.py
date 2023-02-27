@@ -1,6 +1,6 @@
 from typing import List
 
-from src.domain.company import Company
+from src.domain.model.company import Company
 from src.infrastructure.config.exceptions import EntityAlreadyExists
 
 

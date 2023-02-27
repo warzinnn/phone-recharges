@@ -1,6 +1,6 @@
 import json
 
-from src.domain.company import Company
+from src.domain.model.company import Company
 
 
 class TestCompany:

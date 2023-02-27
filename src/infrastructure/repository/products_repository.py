@@ -1,7 +1,7 @@
 from typing import List
 
-from src.domain.company import Company
-from src.domain.products import Products
+from src.domain.model.company import Company
+from src.domain.model.products import Products
 from src.infrastructure.config.exceptions import EntityAlreadyExists
 
 
@@ -67,9 +67,7 @@ class ProductsRepository:
             except Exception as e:
                 return e
 
-    def create_new_product(
-        self, product_id: str, value: float, company_id: str
-    ) -> Products:
+    def create_new_product(self, product_id: str, value: float, company_id: str) -> Products:
         """
         Insert data in Product table
         :param
@@ -85,7 +83,7 @@ class ProductsRepository:
         """
         with self.__connection_handler() as db:
             try:
-                db.session.expire_on_commit = False
+                db.session.expire_on_commit = False # if this flag is set to false it is not possible to return the Product obj (it will be expired)
                 if self.select_product_by_id(product_id):
                     raise EntityAlreadyExists("Product already exists.")
                 data_insert = Products(product_id, value, company_id)

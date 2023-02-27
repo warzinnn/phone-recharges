@@ -15,6 +15,7 @@ pytest-flask = "*"
 isort = "*"
 flake8 = "*"
 black = "*"
+pytest-mock = "*"
 
 [dev-packages]
 

@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 
-from src.domain.company import Company
+from src.domain.model.company import Company
 from src.infrastructure.repository.company_repository import CompanyRepository
 
 
