@@ -31,7 +31,7 @@ git clone https://github.com/warzinnn/phone-recharges.git
 pip install -r requirements
 ```
 
-3. Set environment variable. Update the .env file with the following information:  
+3. Set environment variable. Update (or create) the .env file with the following information:  
 PS: Type in a postgres user and password of your choice.
 ```sh
 CONFIGURATION_SETUP="config.DevelopmentConfig"
