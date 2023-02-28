@@ -94,10 +94,10 @@ def update_product():
 @blueprint_products.route("/products", methods=["DELETE"])
 def delete_product():
     repo = ProductsRepository(DBConnectionHandler)
-    query_param_company_id = request.args.get("company_id")
+    query_param_product_id = request.args.get("product_id")
 
     try:
-        data = repo.delete_product(query_param_company_id)
+        data = repo.delete_product(query_param_product_id)
         return jsonify({"message": data})
     except Exception:
         return jsonify({"message": "error"})
