@@ -1,6 +1,8 @@
 from typing import List
 from src.domain.model.recharge import Recharge
 from src.domain.model.products import Products
+from sqlalchemy.exc import IntegrityError
+from src.infrastructure.config.exceptions import DataIsNotPresentInTable
 
 class RechargeRepository:
     def __init__(self, connection_handler) -> None:
@@ -46,8 +48,8 @@ class RechargeRepository:
                     )\
                     .all()
                 return data
-            except Exception as e:
-                return e
+            except Exception:
+                return None
     
     def select_all_recharges_by_phone_number(self, phone_number: str) -> List:
         """
@@ -68,8 +70,8 @@ class RechargeRepository:
                     )\
                     .all()
                 return data
-            except Exception as e:
-                return e
+            except Exception:
+                return None
 
     def do_recharge(self, phone_number: str, product_id: str):
         """
@@ -82,11 +84,14 @@ class RechargeRepository:
         """
         with self.__connection_handler() as db:
             try:
-                db.session.expire_on_commit = False # if this flag is set to false it is not possible to return the Product obj (it will be expired)
+                db.session.expire_on_commit = False # if this flag is set to true it is not possible to return the Product obj (it will be expired)
                 data_insert = Recharge(phone_number, product_id)
                 db.session.add(data_insert)
                 db.session.commit()
                 return data_insert
+            except IntegrityError:
+                db.session.rollback()
+                raise DataIsNotPresentInTable("Product does not exists.")
             except Exception as e:
                 db.session.rollback()
                 raise e

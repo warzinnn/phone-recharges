@@ -4,7 +4,7 @@ from uuid import UUID
 from datetime import datetime
 
 class TestRecharge():
-    def test_recharges_object_attributes_is_the_expected_type(self):
+    def test_recharges_object_attributes_are_the_expected_type(self):
         """
         GIVEN a recharge object is created
         WHEN attributes are required

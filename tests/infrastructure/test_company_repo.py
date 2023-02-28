@@ -1,52 +1,40 @@
 from unittest import mock
 
 import pytest
-from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 
 from src.domain.model.company import Company
 from src.infrastructure.repository.company_repository import CompanyRepository
+from src.infrastructure.config.connection import DBConnectionHandler
+from src.infrastructure.config.exceptions import EntityAlreadyExists
+from typing import List
 
-
-class ConnectionHandlerMock:
-    """
-    STUB Data
-    """
-
-    def __init__(self) -> None:
-        self.session = UnifiedAlchemyMagicMock(
-            data=[
-                ([mock.call.query(Company)], [Company("vivo_11")]),
-                (
-                    [
-                        mock.call.query(Company),
-                        mock.call.filter(Company.company_id == "vivo_12"),
-                    ],
-                    [Company("vivo_12")],
-                ),
-                (
-                    [
-                        mock.call.query(Company),
-                        mock.call.filter(Company.company_id == "mock_00"),
-                    ],
-                    [],  # Empty list to enter in the condition of company_id not in database
-                ),
-            ]
-        )
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.session.close()
-
-
-@pytest.fixture
+@pytest.fixture(scope='class')
 def configure_repo():
-    """Fixture to return the CompanyRepository with the mock connection"""
-    return CompanyRepository(ConnectionHandlerMock)
+    """Fixture to return the CompanyRepository with the connection to DB"""
+    return CompanyRepository(DBConnectionHandler)
+
+
+@pytest.fixture(scope='class')
+def mock_data_for_company():
+    """
+    Fixture to insert a data into DB.
+    After the test is done it will run the 'clean up', which deletes the objects inserted previoulsy
+    """
+    with DBConnectionHandler() as db:
+        try:
+            company_data_insert = Company('mock_c_11')
+            db.session.add(company_data_insert)
+            db.session.commit()
+            yield
+            db.session.delete(company_data_insert)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
 
 
 class TestCompanyRepository:
+    
     def test_select_all_company(self, configure_repo):
         """
         GIVEN a database with companies already inserted
@@ -55,33 +43,65 @@ class TestCompanyRepository:
         """
         data = configure_repo.select_all_company()
         assert isinstance(data[0], Company)
-        assert data[0].company_id == "vivo_11"
 
-    def test_select_company_by_id(self, configure_repo):
+    def test_select_company_by_id(self, configure_repo, mock_data_for_company):
         """
         GIVEN a database with companies already inserted
         WHEN the select is realized with filter by 'company_id'
         THEN checks if the returned object is equal to expected
         """
-        data = configure_repo.select_company_by_id("vivo_12")
+        data = configure_repo.select_company_by_id("mock_c_11")
         assert isinstance(data[0], Company)
-        assert data[0].company_id == "vivo_12"
+        assert data[0].company_id == "mock_c_11"
 
+    def test_select_company_by_id_fail(self, configure_repo, mock_data_for_company):
+        """
+        GIVEN a database with companies already inserted
+        WHEN the select is realized with filter by 'company_id' with invalid input
+        THEN checks if the returned object is equal to expected
+        """
+        data = configure_repo.select_company_by_id("mo")
+        assert isinstance(data, List)
+        assert data == []
+        
     def test_create_new_company(self, configure_repo):
         """
         GIVEN a company is created
         WHEN insert the company object into database
         THEN checks if the returned object from insert is equal to expected
         """
-        data = configure_repo.create_new_company("mock_00")
+        data = configure_repo.create_new_company("mock_company_06")
         assert isinstance(data, Company)
-        assert data.company_id == "mock_00"
+        assert data.company_id == "mock_company_06"
+
+    def test_create_new_company_with_error(self, configure_repo):
+        """
+        GIVEN a company is already created
+        WHEN insert a company object with the same 'company_id' into database
+        THEN checks if the error raised is equal to expected
+        """
+        with pytest.raises(EntityAlreadyExists) as e:
+            configure_repo.create_new_company("mock_company_06")
+            assert str(e) == "Company already exists."
 
     def test_delete_company(self, configure_repo):
         """
         GIVEN a company object are in the database
         WHEN delete the company
         THEN checks if the returned value is equal to expected (0 = did not deleted; 1 = was deleted)
+
+        Obs: this test deletes the company created in the test 'test_create_new_company'
         """
-        data = configure_repo.delete_company("vivo_11")
+        data = configure_repo.delete_company("mock_company_06")
         assert data == 1
+
+    def test_delete_company_fail(self, configure_repo):
+        """
+        GIVEN a company object are in the database
+        WHEN delete the company
+        THEN checks if the returned value is equal to expected (0 = did not deleted; 1 = was deleted)
+
+        Obs: this test deletes the company created in the test 'test_create_new_company'
+        """
+        data = configure_repo.delete_company("mock_cccc")
+        assert data == 0

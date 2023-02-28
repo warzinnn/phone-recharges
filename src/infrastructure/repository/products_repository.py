@@ -2,7 +2,9 @@ from typing import List
 
 from src.domain.model.company import Company
 from src.domain.model.products import Products
-from src.infrastructure.config.exceptions import EntityAlreadyExists
+from src.infrastructure.config.exceptions import EntityAlreadyExists, DataIsNotPresentInTable
+from sqlalchemy.exc import IntegrityError
+
 
 
 class ProductsRepository:
@@ -34,8 +36,8 @@ class ProductsRepository:
                     db.session.query(Products).filter(Products.id == product_id).all()
                 )
                 return data
-            except Exception as e:
-                return e
+            except Exception:
+                return None
 
     def select_product_by_value(self, value: float) -> Products:
         """
@@ -47,8 +49,8 @@ class ProductsRepository:
             try:
                 data = db.session.query(Products).filter(Products.value == value).all()
                 return data
-            except Exception as e:
-                return e
+            except Exception:
+                return None
 
     def select_products_by_company(self, company_id: str) -> List[Company]:
         """
@@ -64,8 +66,8 @@ class ProductsRepository:
                     .all()
                 )
                 return data
-            except Exception as e:
-                return e
+            except Exception:
+                return None
 
     def create_new_product(self, product_id: str, value: float, company_id: str) -> Products:
         """
@@ -83,13 +85,16 @@ class ProductsRepository:
         """
         with self.__connection_handler() as db:
             try:
-                db.session.expire_on_commit = False # if this flag is set to false it is not possible to return the Product obj (it will be expired)
+                db.session.expire_on_commit = False # if this flag is set to true it is not possible to return the Product obj (it will be expired)
                 if self.select_product_by_id(product_id):
                     raise EntityAlreadyExists("Product already exists.")
                 data_insert = Products(product_id, value, company_id)
                 db.session.add(data_insert)
                 db.session.commit()
                 return data_insert
+            except IntegrityError:
+                db.session.rollback()
+                raise DataIsNotPresentInTable("Company does not exists.")
             except Exception as e:
                 db.session.rollback()
                 raise e

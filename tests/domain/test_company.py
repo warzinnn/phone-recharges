@@ -4,6 +4,16 @@ from src.domain.model.company import Company
 
 
 class TestCompany:
+    def test_company_object_attributes_is_the_expected_type(self):
+        """
+        GIVEN a company object is created
+        WHEN attributes are required
+        THEN checks if the type of attributes is equal to the expected data
+        """
+        new_company = Company("claro_11")
+        assert isinstance(new_company.company_id, str)
+      
+
     def test_company_attributes_equal_to_expected(self):
         """
         GIVEN a company object is created

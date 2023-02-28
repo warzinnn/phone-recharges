@@ -52,7 +52,7 @@ class CompanyRepository:
             try:
                 db.session.expire_on_commit = False
                 if self.select_company_by_id(company_id):
-                    raise EntityAlreadyExists(f"Company {company_id} already exists.")
+                    raise EntityAlreadyExists("Company already exists.")
                 data_insert = Company(company_id)
                 db.session.add(data_insert)
                 db.session.commit()

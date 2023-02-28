@@ -16,6 +16,9 @@ isort = "*"
 flake8 = "*"
 black = "*"
 pytest-mock = "*"
+pytest-postgresql = "*"
+psycopg = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

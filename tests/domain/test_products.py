@@ -4,16 +4,31 @@ from src.domain.model.products import Products
 
 
 class TestProducts:
+
+    def test_products_object_attributes_are_the_expected_type(self):
+        """
+        GIVEN a product object is created
+        WHEN attributes are required
+        THEN checks if the type of attributes is equal to the expected data
+        """
+        new_product = Products("claro_10", 10.0, "claro_11")
+        
+        assert isinstance(new_product.id, str)
+        assert isinstance(new_product.value, float)
+        assert isinstance(new_product.id_company, str)
+
+
     def test_products_attributes_equal_to_expected(self):
         """
         GIVEN a product object is created
         WHEN attributes id and value are queried
         THEN checks if attributes id and value from product object is equal to the expected data
         """
-        new_product = Products("claro_10", 10)
+        new_product = Products("claro_10", 10.0, "claro_11")
 
         assert new_product.id == "claro_10"
         assert new_product.value == 10
+        assert new_product.id_company == "claro_11"
 
     def test_products_obj_as_dict(self):
         """

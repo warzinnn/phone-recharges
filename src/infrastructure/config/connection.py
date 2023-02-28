@@ -1,12 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from dotenv import dotenv_values
 
 class DBConnectionHandler:
     def __init__(self) -> None:
-        self.__connection_string = (
-            "postgresql+psycopg2://warzin:my_pass@localhost:5432/recharges"
-        )
+        self.__connection_string = dotenv_values(".env")['POSTGRES_URL']
         self.__engine = self.__create_database_engine()
         self.session = None
 

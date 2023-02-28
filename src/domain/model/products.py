@@ -1,5 +1,5 @@
 class Products:
-    def __init__(self, id: str, value: float, id_company: str = None) -> None:
+    def __init__(self, id: str, value: float, id_company: str) -> None:
         self.id = id
         self.value = value
         self.id_company = id_company
