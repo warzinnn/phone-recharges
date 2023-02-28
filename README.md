@@ -70,4 +70,4 @@ docker-compose up
 | PUT | /company/products |  Update a product |
 | DELETE | /company/products |  Delete a product |
 | GET | /recharge |  Return the list of recharges |
-| DELETE | /recharge |  Create a new recharge |
+| POSt | /recharge |  Create a new recharge |
