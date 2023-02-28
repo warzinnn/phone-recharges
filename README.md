@@ -17,7 +17,7 @@ Project realized for studies purpose based on the [Desafio Backend do Jeitto.](h
     - Blueprints (flask)
     - Repository pattern
     - Factory pattern
-    - Models, Entities, Use cases
+    - Models, Entities
 
 ### Installation
 
@@ -31,9 +31,14 @@ git clone https://github.com/warzinnn/phone-recharges.git
 pip install -r requirements
 ```
 
-3. Set environment variable
+3. Set environment variable. Update the .env file with the following information:
+PS: Type in a postgres user and password of your choice.
 ```sh
-export CONFIGURATION_SETUP="config.DevelopmentConfig"
+CONFIGURATION_SETUP="config.DevelopmentConfig"
+POSTGRES_USER=CHANGE_THIS
+POSTGRES_PASSWORD=CHANGE_THIS
+POSTGRES_DB=dev_recharges
+POSTGRES_URL="postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}"
 ```
 
 4. Docker (Set up Postgresql)
@@ -50,3 +55,20 @@ docker-compose up
 
 - For tests use:  
     `python3 -m pytest`
+
+### API Endpoints
+- There's a postman collection in the project files with the list of the resources and their respective parameters.
+    `phone-recharges.postman_collection.json`
+
+| HTTP Verb | Endpoint | Action |
+| --- | --- | --- |
+| GET | /company |  Return the list of companies |
+| POST | /company |  Create a new company |
+| DELETE | /company |  Delete a company |
+| GET | /company/products |  Return the list of products |
+| POST | /company/products |  Create a new product |
+| PUT | /company/products |  Update a product |
+| DELETE | /company/products |  Delete a product |
+| GET | /recharge |  Return the list of recharges |
+| DELETE | /recharge |  Create a new recharge |
+
