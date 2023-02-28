@@ -42,7 +42,7 @@ POSTGRES_URL="postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localh
 ```
 
 4. Docker (Set up Postgresql)
-```sh
+```sh 
 docker-compose up
 ```
 
