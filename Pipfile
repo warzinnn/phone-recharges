@@ -11,14 +11,12 @@ install = "*"
 psycopg2 = "*"
 flask-sqlalchemy = "*"
 mock-alchemy = "*"
-pytest-flask = "*"
 isort = "*"
 flake8 = "*"
 black = "*"
-pytest-mock = "*"
-pytest-postgresql = "*"
 psycopg = "*"
 python-dotenv = "*"
+pytest-flask = "*"
 
 [dev-packages]
 
