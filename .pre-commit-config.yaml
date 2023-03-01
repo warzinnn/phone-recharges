@@ -10,6 +10,11 @@ repos:
     hooks:
     - id: flake8
       stages: [commit]
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+    - id: isort
+      stages: [commit]
 -   repo: local
     hooks:
     - id: pytest
@@ -19,11 +24,3 @@ repos:
       always_run: true
       pass_filenames: false
       stages: [commit]
--   repo: local
-    hooks:
-      - id: requirements
-        name: requirements
-        entry: pip3 freeze > requirements.txt; git add requirements.txt
-        language: system
-        pass_filenames: false
-        stages: [commit]
