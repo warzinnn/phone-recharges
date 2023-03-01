@@ -17,6 +17,7 @@ black = "*"
 psycopg = "*"
 python-dotenv = "*"
 pytest-flask = "*"
+pre-commit = "*"
 
 [dev-packages]
 
