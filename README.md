@@ -49,7 +49,7 @@ docker-compose up
 ### Usage
 - Go to project folder. 
     - Run:  
-        `python3 app.py` or `flask run`
+        `python3 app.py` or `flask run --port 5001`
     - Access:  
         `http://127.0.0.1:5001/`
 
