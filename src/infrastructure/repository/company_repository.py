@@ -2,9 +2,12 @@ from typing import List
 
 from src.domain.model.company import Company
 from src.infrastructure.config.exceptions import EntityAlreadyExists
+from src.infrastructure.interfaces.company_repository_interface import (
+    CompanyRepositoryInterface,
+)
 
 
-class CompanyRepository:
+class CompanyRepository(CompanyRepositoryInterface):
     def __init__(self, connection_handler) -> None:
         self.__connection_handler = connection_handler
 

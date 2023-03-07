@@ -1,13 +1,19 @@
 from typing import List
 
-from src.domain.model.company import Company
-from src.domain.model.products import Products
-from src.infrastructure.config.exceptions import EntityAlreadyExists, DataIsNotPresentInTable
 from sqlalchemy.exc import IntegrityError
 
+from src.domain.model.company import Company
+from src.domain.model.products import Products
+from src.infrastructure.config.exceptions import (
+    DataIsNotPresentInTable,
+    EntityAlreadyExists,
+)
+from src.infrastructure.interfaces.products_repository_interface import (
+    ProductsRepositoryInterface,
+)
 
 
-class ProductsRepository:
+class ProductsRepository(ProductsRepositoryInterface):
     def __init__(self, connection_handler) -> None:
         self.__connection_handler = connection_handler
 
@@ -69,7 +75,9 @@ class ProductsRepository:
             except Exception:
                 return None
 
-    def create_new_product(self, product_id: str, value: float, company_id: str) -> Products:
+    def create_new_product(
+        self, product_id: str, value: float, company_id: str
+    ) -> Products:
         """
         Insert data in Product table
         :param
@@ -85,7 +93,8 @@ class ProductsRepository:
         """
         with self.__connection_handler() as db:
             try:
-                db.session.expire_on_commit = False # if this flag is set to true it is not possible to return the Product obj (it will be expired)
+                # if this flag is set to true it is not possible to return the Product obj (it will be expired)
+                db.session.expire_on_commit = False
                 if self.select_product_by_id(product_id):
                     raise EntityAlreadyExists("Product already exists.")
                 data_insert = Products(product_id, value, company_id)
