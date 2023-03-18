@@ -12,9 +12,9 @@ Project realized for studies purpose based on the [Desafio Backend do Jeitto.](h
 - TDD
 - Clean Architecture
 - Flask
-- Orientação a objetos (OOP)
+- Object-Oriented Programming (OOP)
 - ORM (SQLAlchemy)
-- Banco de dados relacional
+- Relational database
 - PostgreSQL
 - GIT
 - Docker
