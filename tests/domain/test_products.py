@@ -1,36 +1,36 @@
-import json
+import pytest
 
 from src.domain.model.products import Products
 
 
-class TestProducts:
+@pytest.fixture
+def mock_product() -> Products:
+    """Fixture to return a Product object"""
+    return Products("claro_10", 10.0, "claro_11")
 
-    def test_products_object_attributes_are_the_expected_type(self):
+
+class TestProducts:
+    def test_products_object_attributes_are_the_expected_type(self, mock_product):
         """
         GIVEN a product object is created
         WHEN attributes are required
         THEN checks if the type of attributes is equal to the expected data
         """
-        new_product = Products("claro_10", 10.0, "claro_11")
-        
-        assert isinstance(new_product.id, str)
-        assert isinstance(new_product.value, float)
-        assert isinstance(new_product.id_company, str)
+        assert isinstance(mock_product.id, str)
+        assert isinstance(mock_product.value, float)
+        assert isinstance(mock_product.id_company, str)
 
-
-    def test_products_attributes_equal_to_expected(self):
+    def test_products_attributes_equal_to_expected(self, mock_product):
         """
         GIVEN a product object is created
         WHEN attributes id and value are queried
         THEN checks if attributes id and value from product object is equal to the expected data
         """
-        new_product = Products("claro_10", 10.0, "claro_11")
+        assert mock_product.id == "claro_10"
+        assert mock_product.value == 10
+        assert mock_product.id_company == "claro_11"
 
-        assert new_product.id == "claro_10"
-        assert new_product.value == 10
-        assert new_product.id_company == "claro_11"
-
-    def test_products_obj_as_dict(self):
+    def test_products_obj_as_dict(self, mock_product):
         """
         GIVEN a product object is created
         WHEN converts the product object into dictionary
@@ -40,16 +40,15 @@ class TestProducts:
             "company_id": "claro_11",
             "products": [{"id": "claro_10", "value": 10.0}],
         }
-        new_product = Products("claro_10", 10.0, "claro_11")
+        assert mock_product.product_as_dict() == expected_dict
 
-        assert new_product.product_as_dict() == expected_dict
-
-    def test_products_dict_serialized_as_JSON(self):
+    def test_product_object_comparison(self, mock_product):
         """
         GIVEN a product object is created
-        WHEN converts the product object into dictionary
-        THEN checks if the returned dict serialized in json is equal to the expected json
+        WHEN compare instances of product object
+        THEN checks if the comparison work as expected
         """
-        new_product = Products("claro_10", 10.0, "claro_11")
-        expected_json = """{"company_id": "claro_11", "products": [{"id": "claro_10", "value": 10.0}]}"""
-        assert json.dumps(new_product.product_as_dict()) == expected_json
+        product_test1 = mock_product
+        product_test2 = mock_product
+
+        assert product_test2 == product_test1
