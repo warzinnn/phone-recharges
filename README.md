@@ -7,17 +7,17 @@ Project realized for studies purpose based on the [Desafio Backend do Jeitto.](h
 
 
 ### Built With
-- Python (version 3.10.9)
-    - Flask
-    - TDD
-    - Postgresql (with Docker)
-    - SQL Alchemy
-
-- Project organization:
-    - Blueprints (flask)
-    - Repository pattern
-    - Factory pattern
-    - Models, Entities
+- Python
+- Pytest
+- TDD
+- Clean Architecture
+- Flask
+- Orientação a objetos (OOP)
+- ORM (SQLAlchemy)
+- Banco de dados relacional
+- PostgreSQL
+- GIT
+- Docker
 
 ### Installation
 
