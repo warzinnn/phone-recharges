@@ -1,21 +1,27 @@
-from typing import List
+from typing import List, Tuple
 
 from sqlalchemy.exc import IntegrityError
 
 from src.domain.model.products import Products
 from src.domain.model.recharge import Recharge
 from src.infrastructure.config.exceptions import DataIsNotPresentInTable
+from src.interfaces.recharges_repository_interface import RechargesRepositoryInterface
 
 
-class RechargeRepository:
+class RechargeRepository(RechargesRepositoryInterface):
+    """Class to define repository: Recharge Repository"""
+
     def __init__(self, connection_handler) -> None:
         self.__connection_handler = connection_handler
 
-    def select_all_recharges(self) -> List:
+    def select_all_recharges(self) -> List[Tuple]:
         """
         Select data in Recharges table. (Select with join to also return the Product value and Company id)
-        :param - None
-        :return - List with all Recharges
+
+        Args:
+            None
+        Returns:
+            List[Tuple]: [Tuple(Recharge, Products.value, Products.id_company)]
         """
         with self.__connection_handler() as db:
             try:
@@ -29,11 +35,14 @@ class RechargeRepository:
             except Exception:
                 return None
 
-    def select_all_recharges_by_recharge_id(self, recharge_id: str) -> List:
+    def select_all_recharges_by_recharge_id(self, recharge_id: str) -> List[Tuple]:
         """
         Select data in Recharges table. (Select with join to also return the Product value and Company id)
-        :param - recharge_id
-        :return - List with all Recharges
+
+        Args:
+            recharge_id: Id of recharge
+        Returns:
+            List[Tuple]: [Tuple(Recharge, Products.value, Products.id_company)]
         """
         with self.__connection_handler() as db:
             try:
@@ -48,11 +57,14 @@ class RechargeRepository:
             except Exception:
                 return None
 
-    def select_all_recharges_by_phone_number(self, phone_number: str) -> List:
+    def select_all_recharges_by_phone_number(self, phone_number: str) -> List[Tuple]:
         """
         Select data in Recharges table. (Select with join to also return the Product value and Company id)
-        :param - phone_number
-        :return - List with all Recharges
+
+        Args:
+            phone_number: phone number
+        Returns:
+            List[Tuple]: [Tuple(Recharge, Products.value, Products.id_company)]
         """
         with self.__connection_handler() as db:
             try:
@@ -70,11 +82,12 @@ class RechargeRepository:
     def do_recharge(self, phone_number: str, product_id: str) -> Recharge:
         """
         Insert data in Recharges table
-        :param
-            - phone_number: telephone number
-            - product_id: id of product
 
-        :return - Recharge object
+        Args:
+            phone_number: phone number
+            product_id: id of product
+        Returns:
+            Recharge: Recharge object
         """
         with self.__connection_handler() as db:
             try:

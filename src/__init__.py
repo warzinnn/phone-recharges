@@ -5,15 +5,15 @@ from dotenv import dotenv_values
 from flask import Flask
 
 import src.infrastructure.entities.orm as ORM
-from src.blueprint.blueprint_company import blueprint_company
-from src.blueprint.blueprint_recharges import blueprint_recharges
+from src.entrypoints.blueprint_company import blueprint_company
+from src.entrypoints.blueprint_recharges import blueprint_recharges
 
 
 def create_app():
     app = Flask(__name__)
 
     # Configuration via env variables
-    config_env = dotenv_values(".env")['CONFIG_ENV']
+    config_env = dotenv_values(".env")["CONFIG_ENV"]
     app.config.from_object(config_env)
 
     print(f"[+] Environment: {app.config['ENV']}")
@@ -22,7 +22,7 @@ def create_app():
 
     # Register blueprint
     app.register_blueprint(blueprint_company, url_prefix="/company")
-    app.register_blueprint(blueprint_recharges, url_prefix='/recharge')
+    app.register_blueprint(blueprint_recharges, url_prefix="/recharge")
 
     # configure mappers
     ORM.configure_mappers()

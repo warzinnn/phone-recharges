@@ -2,20 +2,23 @@ from typing import List
 
 from src.domain.model.company import Company
 from src.infrastructure.config.exceptions import EntityAlreadyExists
-from src.infrastructure.interfaces.company_repository_interface import (
-    CompanyRepositoryInterface,
-)
+from src.interfaces.company_repository_interface import CompanyRepositoryInterface
 
 
 class CompanyRepository(CompanyRepositoryInterface):
+    """Class to define repository: Company Repository"""
+
     def __init__(self, connection_handler) -> None:
         self.__connection_handler = connection_handler
 
     def select_all_company(self) -> List[Company]:
         """
         Select data in Company table
-        :param - None
-        :return - List with all Companies
+
+        Args:
+            None
+        Returns:
+            List[Company]: List with all Companies
         """
         with self.__connection_handler() as db:
             try:
@@ -27,8 +30,11 @@ class CompanyRepository(CompanyRepositoryInterface):
     def select_company_by_id(self, company_id: str) -> List[Company]:
         """
         Select data in Company table by company_id
-        :param - company_id: Id of the company
-        :return - List with all Companies matching the id
+
+        Args:
+            company_id: Id of the company
+        Returns:
+            List[Company]: List with all Companies matching the id
         """
         with self.__connection_handler() as db:
             try:
@@ -44,12 +50,13 @@ class CompanyRepository(CompanyRepositoryInterface):
     def create_new_company(self, company_id: str) -> Company:
         """
         Insert data in Company table
-        :param - company_id: Id of the company
-        :return - Company object
 
-        Explanation
-        ===========
-        First it will check if the product_id already exists in db and if do not exists, it will create.
+        Args:
+            company_id: Id of the company
+        Returns:
+            Company: Company object
+        Raises:
+            EntityAlreadyExists: if Company already exists in database
         """
         with self.__connection_handler() as db:
             try:
@@ -67,8 +74,11 @@ class CompanyRepository(CompanyRepositoryInterface):
     def delete_company(self, company_id: str) -> int:
         """
         Delete data in Company table by company_id
-        :param - company_id: Id of the company
-        :return - int that represents the status from the deletion
+
+        Args:
+            company_id: Id of the company
+        Returns:
+            int: represents the status from the deletion (1=ok; 2=nok)
         """
         with self.__connection_handler() as db:
             try:

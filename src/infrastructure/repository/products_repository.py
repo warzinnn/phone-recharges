@@ -2,26 +2,28 @@ from typing import List
 
 from sqlalchemy.exc import IntegrityError
 
-from src.domain.model.company import Company
 from src.domain.model.products import Products
 from src.infrastructure.config.exceptions import (
     DataIsNotPresentInTable,
     EntityAlreadyExists,
 )
-from src.infrastructure.interfaces.products_repository_interface import (
-    ProductsRepositoryInterface,
-)
+from src.interfaces.products_repository_interface import ProductsRepositoryInterface
 
 
 class ProductsRepository(ProductsRepositoryInterface):
+    """Class to define repository: Products Repository"""
+
     def __init__(self, connection_handler) -> None:
         self.__connection_handler = connection_handler
 
     def select_all_products(self) -> List[Products]:
         """
         Select data in Product table
-        :param - None
-        :return - List with all Producties
+
+        Args:
+            None
+        Returns:
+            List[Products]: List with all products
         """
         with self.__connection_handler() as db:
             try:
@@ -30,11 +32,14 @@ class ProductsRepository(ProductsRepositoryInterface):
             except Exception:
                 return None
 
-    def select_product_by_id(self, product_id: str) -> Products:
+    def select_product_by_id(self, product_id: str) -> List[Products]:
         """
         Select data in Product table by id
-        :param - id: Id of the product
-        :return - List with all producties matching the id
+
+        Args:
+            id: Id of the product
+        Returns:
+            List[Products]: List with all products matching the id
         """
         with self.__connection_handler() as db:
             try:
@@ -45,11 +50,14 @@ class ProductsRepository(ProductsRepositoryInterface):
             except Exception:
                 return None
 
-    def select_product_by_value(self, value: float) -> Products:
+    def select_product_by_value(self, value: float) -> List[Products]:
         """
-        Select data in Product table by id
-        :param - value: value of the product
-        :return - List with all producties matching the id
+        Select data in Products table by value
+
+        Args:
+            value: value of the product
+        Returns:
+            List[Products]: List with all producties matching the value
         """
         with self.__connection_handler() as db:
             try:
@@ -58,11 +66,14 @@ class ProductsRepository(ProductsRepositoryInterface):
             except Exception:
                 return None
 
-    def select_products_by_company(self, company_id: str) -> List[Company]:
+    def select_products_by_company(self, company_id: str) -> List[Products]:
         """
         Select data in Product table by id_company (foreign key)
-        :param - id_company: id of the company
-        :return - List with all producties from the matching id_company
+
+        Args:
+            id_company: id of the company
+        Returns:
+            List[Products]: List with all products from the matching id_company
         """
         with self.__connection_handler() as db:
             try:
@@ -80,16 +91,15 @@ class ProductsRepository(ProductsRepositoryInterface):
     ) -> Products:
         """
         Insert data in Product table
-        :param
-            - product_id: Id of the product
-            - value: The value of product
-            - id_company: id of the company
 
-        :return - Product object
-
-        Explanation
-        ===========
-        First it will check if the product_id already exists in db and if do not exists, it will create.
+        Args:
+            product_id: Id of the product
+            value: The value of product
+            id_company: id of the company
+        Returns:
+            Products: Product object
+        Raises:
+            EntityAlreadyExists: if Product already exists in database
         """
         with self.__connection_handler() as db:
             try:
@@ -103,18 +113,21 @@ class ProductsRepository(ProductsRepositoryInterface):
                 return data_insert
             except IntegrityError:
                 db.session.rollback()
-                raise DataIsNotPresentInTable("Company does not exists.")
+                raise DataIsNotPresentInTable("Product does not exists.")
             except Exception as e:
                 db.session.rollback()
                 raise e
 
     def update_product(self, id_company: str, product_id: str, value: float) -> int:
         """
-        Update data in Product table by id_company_value
-        :param - id_company: Id of the company
-               - value: The value of product
-               - company_id: id of the company
-        :return - int that represents the status from the update
+        Update value of product in Product table by id_company and product_id
+
+        Args:
+            product_id: Id of the product
+            value: The value of product
+            id_company: id of the company
+        Returns:
+            int: represents the status from the update (1=ok; 2=nok)
         """
         with self.__connection_handler() as db:
             try:
@@ -134,8 +147,11 @@ class ProductsRepository(ProductsRepositoryInterface):
     def delete_product(self, product_id: str) -> int:
         """
         Delete data in Product table by product_id
-        :param - product_id: Id of the product
-        :return - int that represents the status from the deletion
+
+        Args:
+            product_id: Id of the product
+        Returns:
+            int: represents the status from the deletion (1=ok; 2=nok)
         """
         with self.__connection_handler() as db:
             try:
