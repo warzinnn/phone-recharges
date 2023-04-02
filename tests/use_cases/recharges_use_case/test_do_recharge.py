@@ -1,8 +1,10 @@
 from typing import List
 
-from src.domain.model.recharge import Recharge
-from src.interfaces.recharges_repository_interface import RechargesRepositoryInterface
-from src.use_cases.do_recharge.do_recharge_use_case import DoRechargeUseCase
+from src.application.interfaces.repository_interfaces.recharges_repository_interface import (
+    RechargesRepositoryInterface,
+)
+from src.application.use_cases.do_recharge.do_recharge_use_case import DoRechargeUseCase
+from src.domain.recharge import Recharge
 
 
 class FakeProductsRepository(RechargesRepositoryInterface):
@@ -29,8 +31,8 @@ class TestDoRechargeUseCase:
         THEN check if the implementation returns a Recharge Object
         """
         repo = FakeProductsRepository()
-        uc = DoRechargeUseCase()
+        uc = DoRechargeUseCase(repo)
 
-        response = uc.do_recharge(repo, "5511999999999", "claro_50")
+        response = uc.do_recharge("5511999999999", "claro_50")
 
         assert isinstance(response, Recharge)

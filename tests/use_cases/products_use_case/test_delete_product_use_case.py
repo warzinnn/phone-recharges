@@ -1,8 +1,12 @@
 from typing import List
 
-from src.domain.model.products import Products
-from src.interfaces.products_repository_interface import ProductsRepositoryInterface
-from src.use_cases.delete_product.delete_product_use_case import DeleteProductUseCase
+from src.application.interfaces.repository_interfaces.products_repository_interface import (
+    ProductsRepositoryInterface,
+)
+from src.application.use_cases.delete_product.delete_product_use_case import (
+    DeleteProductUseCase,
+)
+from src.domain.products import Products
 
 
 class FakeProductsRepository(ProductsRepositoryInterface):
@@ -40,7 +44,7 @@ class TestDeleteProductUseCase:
         THEN check if the implementation returns a successful message
         """
         repo = FakeProductsRepository()
-        uc = DeleteProductUseCase()
-        response = uc.delete_product(repo, "claro_20")
+        uc = DeleteProductUseCase(repo)
+        response = uc.delete_product("claro_20")
 
         assert response == "Product deleted"

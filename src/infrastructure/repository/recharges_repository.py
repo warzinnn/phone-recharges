@@ -2,10 +2,12 @@ from typing import List, Tuple
 
 from sqlalchemy.exc import IntegrityError
 
-from src.domain.model.products import Products
-from src.domain.model.recharge import Recharge
+from src.application.interfaces.repository_interfaces.recharges_repository_interface import (
+    RechargesRepositoryInterface,
+)
+from src.domain.products import Products
+from src.domain.recharge import Recharge
 from src.infrastructure.config.exceptions import DataIsNotPresentInTable
-from src.interfaces.recharges_repository_interface import RechargesRepositoryInterface
 
 
 class RechargeRepository(RechargesRepositoryInterface):

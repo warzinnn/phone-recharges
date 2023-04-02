@@ -1,8 +1,12 @@
 from typing import List
 
-from src.domain.model.recharge import Recharge
-from src.interfaces.recharges_repository_interface import RechargesRepositoryInterface
-from src.use_cases.get_recharges.get_recharges_use_case import GetRechargesUseCase
+from src.application.interfaces.repository_interfaces.recharges_repository_interface import (
+    RechargesRepositoryInterface,
+)
+from src.application.use_cases.get_recharges.get_recharges_use_case import (
+    GetRechargesUseCase,
+)
+from src.domain.recharge import Recharge
 
 
 class FakeProductsRepository(RechargesRepositoryInterface):
@@ -38,11 +42,11 @@ class TestGetRechargesUseCase:
         THEN check if the implementation returns a List with a Tuple object
         """
         repo = FakeProductsRepository()
-        uc = GetRechargesUseCase()
+        uc = GetRechargesUseCase(repo)
 
-        response_1 = uc.get_recharges(repo, "", "")
-        response_2 = uc.get_recharges(repo, "eedbcbef-a8e9-44ef-a920-289ca663e552", "")
-        response_3 = uc.get_recharges(repo, "", "5511999999999")
+        response_1 = uc.get_recharges("", "")
+        response_2 = uc.get_recharges("eedbcbef-a8e9-44ef-a920-289ca663e552", "")
+        response_3 = uc.get_recharges("", "5511999999999")
 
         assert len(response_1) > 0
         assert response_1[0]["phone_number"] == "5511999999999"

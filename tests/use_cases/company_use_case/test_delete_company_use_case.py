@@ -1,8 +1,12 @@
 from typing import List
 
-from src.domain.model.company import Company
-from src.interfaces.company_repository_interface import CompanyRepositoryInterface
-from src.use_cases.delete_company.delete_company_use_case import DeleteCompanyUseCase
+from src.application.interfaces.repository_interfaces.company_repository_interface import (
+    CompanyRepositoryInterface,
+)
+from src.application.use_cases.delete_company.delete_company_use_case import (
+    DeleteCompanyUseCase,
+)
+from src.domain.company import Company
 
 
 class FakeCompanyRepository(CompanyRepositoryInterface):
@@ -29,7 +33,7 @@ class TestDeleteCompanyUseCase:
         THEN check if the implementation deletes a company successfully
         """
         repo = FakeCompanyRepository()
-        uc = DeleteCompanyUseCase()
-        response = uc.delete_company(repo, "2400a00k")
+        uc = DeleteCompanyUseCase(repo)
+        response = uc.delete_company("2400a00k")
 
         assert response == "Company deleted"

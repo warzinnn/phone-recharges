@@ -1,8 +1,12 @@
 from typing import List
 
-from src.domain.model.company import Company
-from src.interfaces.company_repository_interface import CompanyRepositoryInterface
-from src.use_cases.create_company.create_company_use_case import CreateCompanyUseCase
+from src.application.interfaces.repository_interfaces.company_repository_interface import (
+    CompanyRepositoryInterface,
+)
+from src.application.use_cases.create_company.create_company_use_case import (
+    CreateCompanyUseCase,
+)
+from src.domain.company import Company
 
 
 class FakeCompanyRepository(CompanyRepositoryInterface):
@@ -29,7 +33,7 @@ class TestCreateCompanyUseCase:
         THEN check if the implementation returns a successful message
         """
         repo = FakeCompanyRepository()
-        uc = CreateCompanyUseCase()
-        response = uc.create_company(repo, "2400a00k")
+        uc = CreateCompanyUseCase(repo)
+        response = uc.create_company("2400a00k")
 
         assert response == "Company created"
