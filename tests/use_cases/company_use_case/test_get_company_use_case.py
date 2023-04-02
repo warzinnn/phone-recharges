@@ -1,8 +1,10 @@
 from typing import List
 
-from src.domain.model.company import Company
-from src.interfaces.company_repository_interface import CompanyRepositoryInterface
-from src.use_cases.get_company.get_company_use_case import GetCompanyUseCase
+from src.application.interfaces.repository_interfaces.company_repository_interface import (
+    CompanyRepositoryInterface,
+)
+from src.application.use_cases.get_company.get_company_use_case import GetCompanyUseCase
+from src.domain.company import Company
 
 
 class FakeCompanyRepository(CompanyRepositoryInterface):
@@ -29,9 +31,9 @@ class TestGetCompanyUseCase:
         THEN check if the implementation returns the companies
         """
         repo = FakeCompanyRepository()
-        uc = GetCompanyUseCase()
-        response_1 = uc.get_company(repo, "")
-        response_2 = uc.get_company(repo, "2400a00k")
+        uc = GetCompanyUseCase(repo)
+        response_1 = uc.get_company("")
+        response_2 = uc.get_company("2400a00k")
 
         assert len(response_1) > 0
         assert response_1[0]["company_id"] == "5ca667f8"

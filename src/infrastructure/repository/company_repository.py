@@ -1,8 +1,10 @@
 from typing import List
 
-from src.domain.model.company import Company
+from src.application.interfaces.repository_interfaces.company_repository_interface import (
+    CompanyRepositoryInterface,
+)
+from src.domain.company import Company
 from src.infrastructure.config.exceptions import EntityAlreadyExists
-from src.interfaces.company_repository_interface import CompanyRepositoryInterface
 
 
 class CompanyRepository(CompanyRepositoryInterface):

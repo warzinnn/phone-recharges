@@ -1,8 +1,12 @@
 from typing import List
 
-from src.domain.model.products import Products
-from src.interfaces.products_repository_interface import ProductsRepositoryInterface
-from src.use_cases.update_product.update_product_use_case import UpdateProductUseCase
+from src.application.interfaces.repository_interfaces.products_repository_interface import (
+    ProductsRepositoryInterface,
+)
+from src.application.use_cases.update_product.update_product_use_case import (
+    UpdateProductUseCase,
+)
+from src.domain.products import Products
 
 
 class FakeProductsRepository(ProductsRepositoryInterface):
@@ -40,7 +44,7 @@ class TestUpdateProductUseCase:
         THEN check if the implementation returns a successful message
         """
         repo = FakeProductsRepository()
-        uc = UpdateProductUseCase()
-        response = uc.update_product(repo, "claro_11", "claro_20", 99.5)
+        uc = UpdateProductUseCase(repo)
+        response = uc.update_product("claro_11", "claro_20", 99.5)
 
         assert response == "Product updated"

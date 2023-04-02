@@ -2,12 +2,14 @@ from typing import List
 
 from sqlalchemy.exc import IntegrityError
 
-from src.domain.model.products import Products
+from src.application.interfaces.repository_interfaces.products_repository_interface import (
+    ProductsRepositoryInterface,
+)
+from src.domain.products import Products
 from src.infrastructure.config.exceptions import (
     DataIsNotPresentInTable,
     EntityAlreadyExists,
 )
-from src.interfaces.products_repository_interface import ProductsRepositoryInterface
 
 
 class ProductsRepository(ProductsRepositoryInterface):

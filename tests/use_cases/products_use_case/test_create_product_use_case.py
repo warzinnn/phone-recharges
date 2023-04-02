@@ -1,8 +1,12 @@
 from typing import List
 
-from src.domain.model.products import Products
-from src.interfaces.products_repository_interface import ProductsRepositoryInterface
-from src.use_cases.create_product.create_product_use_case import CreateProductUseCase
+from src.application.interfaces.repository_interfaces.products_repository_interface import (
+    ProductsRepositoryInterface,
+)
+from src.application.use_cases.create_product.create_product_use_case import (
+    CreateProductUseCase,
+)
+from src.domain.products import Products
 
 
 class FakeProductsRepository(ProductsRepositoryInterface):
@@ -40,7 +44,7 @@ class TestCreateProductUseCase:
         THEN check if the implementation returns a successful message
         """
         repo = FakeProductsRepository()
-        uc = CreateProductUseCase()
-        response = uc.create_product(repo, "claro_11", "claro_20", 20.0)
+        uc = CreateProductUseCase(repo)
+        response = uc.create_product("claro_11", "claro_20", 20.0)
 
         assert response == "Product created"

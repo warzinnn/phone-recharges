@@ -3,7 +3,7 @@ from uuid import UUID
 
 import pytest
 
-from src.domain.model.recharge import Recharge
+from src.domain.recharge import Recharge
 
 
 @pytest.fixture

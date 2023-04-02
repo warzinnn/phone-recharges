@@ -1,8 +1,12 @@
 from typing import List
 
-from src.domain.model.products import Products
-from src.interfaces.products_repository_interface import ProductsRepositoryInterface
-from src.use_cases.get_products.get_products_use_case import GetProductsUseCase
+from src.application.interfaces.repository_interfaces.products_repository_interface import (
+    ProductsRepositoryInterface,
+)
+from src.application.use_cases.get_products.get_products_use_case import (
+    GetProductsUseCase,
+)
+from src.domain.products import Products
 
 
 class FakeProductsRepository(ProductsRepositoryInterface):
@@ -43,9 +47,9 @@ class TestGetProductsUseCase:
         THEN check if the implementation returns the products
         """
         repo = FakeProductsRepository()
-        uc = GetProductsUseCase()
-        response_1 = uc.get_products(repo, "claro_11")
-        response_2 = uc.get_products(repo, "")
+        uc = GetProductsUseCase(repo)
+        response_1 = uc.get_products("claro_11")
+        response_2 = uc.get_products("")
 
         assert len(response_1) > 0
         assert response_1[0]["products"][0]["id"] == "claro_10"

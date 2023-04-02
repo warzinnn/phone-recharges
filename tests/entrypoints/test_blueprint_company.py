@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict
 
 
 class TestBlueprintCompany:
@@ -36,4 +36,4 @@ class TestBlueprintCompany:
         THEN checks if the output is equal to a list type
         """
         response = client.get("/company/")
-        assert isinstance(response.json, List)
+        assert isinstance(response.json, Dict)
