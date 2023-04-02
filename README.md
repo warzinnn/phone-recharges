@@ -1,9 +1,7 @@
 ## Phone Recharge Project
 
 
-API used for phone recharges. The user can buy telephone credits for his phone by informing his phone number.
-
-Project realized for studies purpose based on the [Desafio Backend do Jeitto.](https://github.com/Jeitto/jeitto-backend-challenge-201901)
+API (CRUD) used for phone recharges. The user can buy telephone credits for his phone by informing his phone number.
 
 
 ### Built With
@@ -34,7 +32,7 @@ pip install -r requirements
 3. Set environment variable. Update (or create) the .env file with the following information:  
 PS: Type in a postgres user and password of your choice.
 ```sh
-CONFIGURATION_SETUP="config.DevelopmentConfig"
+CONFIGURATION_SETUP="src.infrastructure.web_flask.config.DevelopmentConfig"
 POSTGRES_USER=CHANGE_THIS
 POSTGRES_PASSWORD=CHANGE_THIS
 POSTGRES_DB=dev_recharges
@@ -49,7 +47,7 @@ docker-compose up
 ### Usage
 - Go to project folder. 
     - Run:  
-        `python3 app.py` or `flask run --port 5001`
+        `python3 app_flask.py` or `flask --app app_flask run --port 5001`
     - Access:  
         `http://127.0.0.1:5001/`
 
